@@ -1,0 +1,18 @@
+name: surface_duo_platform_interface
+description: Surface duo SDK plugin platform interface
+version: 0.0.1
+author: spencer@frozor.io
+homepage: https://github.com/ArcticZeroo/surface-duo-flutter
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
