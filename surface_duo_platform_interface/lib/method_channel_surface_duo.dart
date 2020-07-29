@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:surface_duo_platform_interface/hinge_value_notifier.dart';
 import 'package:surface_duo_platform_interface/surface_duo_platform_interface.dart';
 
 /// An implementation of [SurfaceDuoPlatform] using method channels
@@ -8,7 +11,8 @@ class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
       MethodChannel('io.frozor.surfaceduo.methods');
   final EventChannel _hingeAngleEventChannel =
       EventChannel('io.frozor.surfaceduo.events.hinge');
-  ValueNotifier<int> _hingeAngle;
+  HingeValueNotifier<int> _hingeAngle;
+  StreamSubscription _hingeAngleSubscription;
 
   @override
   Future<bool> isDeviceSurfaceDuo() {
@@ -33,18 +37,24 @@ class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
     return _methodChannel.invokeMethod<int>('getHingeAngle');
   }
 
-  @override
-  Future<ValueNotifier<int>> getHingeValueNotifier() async {
-    if (_hingeAngle != null) {
-      return _hingeAngle;
-    }
-
-    // TODO: Cancel listening when possible to avoid extra memory usage
-    _hingeAngle = ValueNotifier<int>(0);
-    _hingeAngleEventChannel.receiveBroadcastStream().listen((angle) {
+  void addHingeListener() {
+    _hingeAngleSubscription =
+        _hingeAngleEventChannel.receiveBroadcastStream().listen((angle) {
       _hingeAngle.value = angle;
     });
+  }
 
+  void removeHingeListener() {
+    _hingeAngleSubscription.cancel();
+  }
+
+  @override
+  ValueNotifier<int> getHingeValueNotifier() {
+    if (_hingeAngle == null) {
+      _hingeAngle = HingeValueNotifier<int>(0,
+          onFirstListenerAdded: addHingeListener,
+          onLastListenerRemoved: removeHingeListener);
+    }
     return _hingeAngle;
   }
 }

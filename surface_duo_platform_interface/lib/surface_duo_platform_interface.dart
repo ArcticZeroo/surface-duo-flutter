@@ -47,7 +47,7 @@ abstract class SurfaceDuoPlatform extends PlatformInterface {
 
   /// Returns a change notifier that updates each time the hinge
   /// angle changes.
-  Future<ValueNotifier<int>> getHingeValueNotifier() {
+  ValueNotifier<int> getHingeValueNotifier() {
     throw UnimplementedError('getHingeChangeNotifier is not implemented');
   }
 }

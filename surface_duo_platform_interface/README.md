@@ -1,14 +1,10 @@
 # surface_duo_platform_interface
 
-Surface duo SDK plugin platform interface
+Platform interface specification for the Surface Duo SDK. It is likely that this project will only 
+ever support Android (the OS that Surface Duo runs), but it may be relevant to add support for
+windows devices eventually.
 
-## Getting Started
+# Usage
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Don't use this package directly -- use a platform interface package specifically for your platform, 
+or use the official package which endorses the Android one in this repo.
