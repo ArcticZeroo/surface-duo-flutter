@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:surface_duo_platform_interface/hinge_value_notifier.dart';
+import 'package:surface_duo_platform_interface/event_channel_value_notifier.dart';
 import 'package:surface_duo_platform_interface/surface_duo_platform_interface.dart';
 
 /// An implementation of [SurfaceDuoPlatform] using method channels
 class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
   final MethodChannel _methodChannel =
       MethodChannel('io.frozor.surfaceduo.methods');
-  final EventChannel _hingeAngleEventChannel =
-      EventChannel('io.frozor.surfaceduo.events.hinge');
-  HingeValueNotifier<int> _hingeAngle;
-  StreamSubscription _hingeAngleSubscription;
+  final EventChannelValueNotifier<int> _hingeAngleValueNotifier =
+      EventChannelValueNotifier('io.frozor.surfaceduo.events.hinge', 0);
+  final EventChannelValueNotifier<ScreenMode> _screenModeValueNotifier =
+      EventChannelValueNotifier('io.frozor.surfaceduo.events.screenmode', 0);
 
   @override
   Future<bool> isDeviceSurfaceDuo() {
@@ -20,8 +20,8 @@ class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
   }
 
   @override
-  Future<bool> isAppSpanned() {
-    return _methodChannel.invokeMethod<bool>('isAppSpanned');
+  Future<bool> isAppDualScreen() {
+    return _methodChannel.invokeMethod<bool>('isAppDualScreen');
   }
 
   @override
@@ -37,24 +37,13 @@ class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
     return _methodChannel.invokeMethod<int>('getHingeAngle');
   }
 
-  void addHingeListener() {
-    _hingeAngleSubscription =
-        _hingeAngleEventChannel.receiveBroadcastStream().listen((angle) {
-      _hingeAngle.value = angle;
-    });
-  }
-
-  void removeHingeListener() {
-    _hingeAngleSubscription.cancel();
+  @override
+  ValueNotifier<int> getHingeValueNotifier() {
+    return _hingeAngleValueNotifier;
   }
 
   @override
-  ValueNotifier<int> getHingeValueNotifier() {
-    if (_hingeAngle == null) {
-      _hingeAngle = HingeValueNotifier<int>(0,
-          onFirstListenerAdded: addHingeListener,
-          onLastListenerRemoved: removeHingeListener);
-    }
-    return _hingeAngle;
+  ValueNotifier<ScreenMode> getScreenModeValueNotifier() {
+    return _screenModeValueNotifier;
   }
 }

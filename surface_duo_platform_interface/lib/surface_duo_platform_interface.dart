@@ -4,6 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:surface_duo_platform_interface/method_channel_surface_duo.dart';
 
+enum ScreenMode {
+  singleScreen,
+  // aka spanned
+  dualScreen
+}
+
 abstract class SurfaceDuoPlatform extends PlatformInterface {
   /// A static token to verify that this platform interface is being extended
   /// rather than implemented.
@@ -32,7 +38,7 @@ abstract class SurfaceDuoPlatform extends PlatformInterface {
 
   /// Returns `true` if the device is a surface duo, and this app is spanned
   /// across both screens of the device.
-  Future<bool> isAppSpanned() {
+  Future<bool> isAppDualScreen() {
     throw UnimplementedError('isAppSpanned is not implemented');
   }
 
@@ -45,9 +51,13 @@ abstract class SurfaceDuoPlatform extends PlatformInterface {
     throw UnimplementedError('getHingeAngle is not implemented');
   }
 
-  /// Returns a change notifier that updates each time the hinge
-  /// angle changes.
+  /// Returns a [ValueNotifier] that updates each time the hinge angle changes.
   ValueNotifier<int> getHingeValueNotifier() {
     throw UnimplementedError('getHingeChangeNotifier is not implemented');
+  }
+
+  /// Returns a [ValueNotifier] that updates each time the screen mode changes
+  ValueNotifier<ScreenMode> getScreenModeValueNotifier() {
+    throw UnimplementedError('getScreenModeValueNotifier is not implemented');
   }
 }

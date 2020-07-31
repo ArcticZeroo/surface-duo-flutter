@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  surface_duo_platform_interface: ^0.0.1
-
+  surface_duo_platform_interface:
+    path: ../surface_duo_platform_interface
 
 dev_dependencies:
   flutter_test:
