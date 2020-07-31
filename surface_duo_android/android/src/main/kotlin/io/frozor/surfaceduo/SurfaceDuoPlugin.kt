@@ -12,7 +12,6 @@ import android.view.View
 import androidx.annotation.NonNull;
 import com.microsoft.device.dualscreen.core.ScreenHelper
 import com.microsoft.device.dualscreen.core.ScreenMode
-import com.microsoft.device.dualscreen.core.manager.ScreenModeListener
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -173,17 +172,23 @@ public class SurfaceDuoPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
     }
 
     private fun onListenToScreenMode(arguments: Any?, events: EventChannel.EventSink?) {
+        val updateScreenMode = { run {
+            val screenMode = if (ScreenHelper.isDualMode(_context)) {
+                ScreenMode.DUAL_SCREEN
+            } else {
+                ScreenMode.SINGLE_SCREEN
+            }
+            events?.success(screenMode.id)
+        } }
+
         _screenModeListener = View.OnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             run {
-                val screenMode = if (ScreenHelper.isDualMode(_context)) {
-                    ScreenMode.DUAL_SCREEN
-                } else {
-                    ScreenMode.SINGLE_SCREEN
-                }
-                events?.success(screenMode.id)
+                updateScreenMode()
             }
         }
         _activity?.window?.decorView?.rootView?.addOnLayoutChangeListener(_screenModeListener)
+        // send an initial value to the stream when listening begins
+        updateScreenMode()
     }
 
     private fun onCancelListeningToHingeSensor(arguments: Any?) {

@@ -1,8 +1,8 @@
 name: surface_duo_android
 description: Surface Duo SDK Android implementation
 version: 0.0.1
-author:
-homepage:
+author: spencer@frozor.io
+homepage: https://github.com/ArcticZeroo/surface-duo-flutter
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -32,3 +32,4 @@ flutter:
       android:
         package: io.frozor.surfaceduo
         pluginClass: SurfaceDuoPlugin
+        fileName: surface_duo_android.dart

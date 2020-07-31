@@ -7,7 +7,8 @@ import 'package:surface_duo_platform_interface/method_channel_surface_duo.dart';
 enum ScreenMode {
   singleScreen,
   // aka spanned
-  dualScreen
+  dualScreen,
+  unknown
 }
 
 abstract class SurfaceDuoPlatform extends PlatformInterface {

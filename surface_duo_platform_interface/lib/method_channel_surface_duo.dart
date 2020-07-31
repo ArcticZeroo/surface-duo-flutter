@@ -12,7 +12,18 @@ class MethodChannelSurfaceDuo extends SurfaceDuoPlatform {
   final EventChannelValueNotifier<int> _hingeAngleValueNotifier =
       EventChannelValueNotifier('io.frozor.surfaceduo.events.hinge', 0);
   final EventChannelValueNotifier<ScreenMode> _screenModeValueNotifier =
-      EventChannelValueNotifier('io.frozor.surfaceduo.events.screenmode', 0);
+      EventChannelValueNotifier(
+          'io.frozor.surfaceduo.events.screenmode', ScreenMode.singleScreen,
+          transformEvent: (screenModeId) {
+    switch (screenModeId) {
+      case 0:
+        return ScreenMode.singleScreen;
+      case 1:
+        return ScreenMode.dualScreen;
+      case 2:
+        return ScreenMode.unknown;
+    }
+  });
 
   @override
   Future<bool> isDeviceSurfaceDuo() {
